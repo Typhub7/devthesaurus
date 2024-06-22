@@ -1,0 +1,70 @@
+[
+    {
+      "id": "html",
+      "label": "HTML",
+      "description": "HTML (HyperText Markup Language) is the standard markup language for creating web pages.",
+      "link": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+      "children": [
+        {
+          "id": "elements",
+          "label": "Elements",
+          "description": "HTML elements are the building blocks of HTML pages.",
+          "link": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element",
+          "children": [
+            { "id": "div", "label": "<div>", "description": "Defines a division or a section in an HTML document.", "link": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div" },
+            { "id": "span", "label": "<span>", "description": "Used to group inline-elements in a document.", "link": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/span" },
+            { "id": "a", "label": "<a>", "description": "Defines a hyperlink, linking to another location.", "link": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a" },
+            { "id": "img", "label": "<img>", "description": "Embeds an image into the document.", "link": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img" },
+            { "id": "form", "label": "<form>", "description": "Defines an HTML form for user input.", "link": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form" }
+          ]
+        },
+        {
+          "id": "attributes",
+          "label": "Attributes",
+          "description": "HTML attributes provide additional information about elements.",
+          "link": "https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes",
+          "children": [
+            { "id": "class", "label": "class", "description": "Specifies one or more class names for an element.", "link": "https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/class" },
+            { "id": "id", "label": "id", "description": "Specifies a unique id for an element.", "link": "https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id" },
+            { "id": "href", "label": "href", "description": "Specifies the URL of a linked resource.", "link": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attr-href" },
+            { "id": "src", "label": "src", "description": "Specifies the URL of an embedded resource.", "link": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-src" },
+            { "id": "alt", "label": "alt", "description": "Specifies an alternative text for an image.", "link": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-alt" }
+          ]
+        },
+        {
+          "id": "html5",
+          "label": "HTML5",
+          "description": "HTML5 is the latest version of HTML with new elements, attributes, and behaviors.",
+          "link": "https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5",
+          "children": [
+            { "id": "semantic_elements", "label": "Semantic Elements", "description": "Elements that clearly describe their meaning in a human- and machine-readable way.", "link": "https://developer.mozilla.org/en-US/docs/Glossary/Semantics#Semantics_in_HTML" },
+            { "id": "canvas", "label": "<canvas>", "description": "Used to draw graphics via scripting (usually JavaScript).", "link": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas" },
+            { "id": "video", "label": "<video>", "description": "Embeds a media player for video playback.", "link": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video" },
+            { "id": "audio", "label": "<audio>", "description": "Embeds a media player for audio playback.", "link": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio" }
+          ]
+        },
+        {
+          "id": "css",
+          "label": "CSS",
+          "description": "CSS (Cascading Style Sheets) is a style sheet language used for describing the presentation of a document written in HTML or XML.",
+          "link": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+          "children": [
+            { "id": "stylesheets", "label": "Stylesheets", "description": "CSS stylesheets describe how HTML elements are to be displayed.", "link": "https://developer.mozilla.org/en-US/docs/Web/CSS/Stylesheets" },
+            { "id": "selectors", "label": "Selectors", "description": "CSS selectors are used to select the content you want to style.", "link": "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors" },
+            { "id": "properties", "label": "Properties", "description": "CSS properties are used to style and layout HTML elements.", "link": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference" }
+          ]
+        },
+        {
+          "id": "javascript",
+          "label": "JavaScript",
+          "description": "JavaScript is a programming language that enables you to create dynamically updating content, control multimedia, animate images, and pretty much everything else.",
+          "link": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+          "children": [
+            { "id": "dom_manipulation", "label": "DOM Manipulation", "description": "JavaScript can access and modify the content and structure of the DOM.", "link": "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction" },
+            { "id": "events", "label": "Events", "description": "JavaScript can be used to listen for and respond to events on HTML elements.", "link": "https://developer.mozilla.org/en-US/docs/Web/Events" },
+            { "id": "api", "label": "API Integration", "description": "JavaScript can be used to interact with various APIs to extend functionality.", "link": "https://developer.mozilla.org/en-US/docs/Web/API" }
+          ]
+        }
+      ]
+    }
+  ]
