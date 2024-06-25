@@ -43,8 +43,8 @@ const Graph = () => {
     const loader = new FontLoader();
 
     elements.nodes.forEach(node => {
-      const width = 0.5;
-      const height = 0.2;
+      const width = 0.7;
+      const height = 0.25;
       const geometry = new THREE.PlaneGeometry(width, height);
       const material = new THREE.MeshBasicMaterial({ color: getColorByLevel(node.level), side: THREE.DoubleSide });
       const rectangle = new THREE.Mesh(geometry, material);
@@ -67,7 +67,7 @@ const Graph = () => {
     });
 
     elements.edges.forEach(edge => {
-      const material = new THREE.LineBasicMaterial({ color: 0x0000ff, linewidth: 2 });
+      const material = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 3 });
       const sourceNode = elements.nodes.find(n => n.id === edge.source);
       const targetNode = elements.nodes.find(n => n.id === edge.target);
       const points = [
