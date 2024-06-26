@@ -161,7 +161,42 @@ const Graph = () => {
       }
     };
 
-    / Animation pour s'éloigner de l'objet actuel
+    // Animation pour s'éloigner de l'objet actuel
+    const animateCameraTo = (targetPosition, zoomDistance) => {
+      const startPosition = {
+        x: camera.position.x,
+        y: camera.position.y,
+        z: camera.position.z
+      };
+    
+      // Calculer la position intermédiaire en s'éloignant de l'objet actuel
+      const intermediatePosition = {
+        x: startPosition.x,
+        y: startPosition.y,
+        z: startPosition.z + zoomDistance
+      };
+    
+      // Calculer la position cible en ajoutant la distance de zoom au nouvel élément
+      const target = {
+        x: targetPosition.x,
+        y: targetPosition.y,
+        z: targetPosition.z + zoomDistance
+      };
+    
+      const startRotation = {
+        x: camera.rotation.x,
+        y: camera.rotation.y,
+        z: camera.rotation.z
+      };
+    
+      camera.lookAt(new THREE.Vector3(targetPosition.x, targetPosition.y, targetPosition.z));
+      const endRotation = {
+        x: camera.rotation.x,
+        y: camera.rotation.y,
+        z: camera.rotation.z
+      };
+      camera.rotation.set(startRotation.x, startRotation.y, startRotation.z);
+    
       const tweenAway = new TWEEN.Tween(startPosition)
         .to(intermediatePosition, 1500) // Durée de la première étape de l'animation en ms
         .easing(TWEEN.Easing.Quadratic.InOut)
@@ -170,7 +205,6 @@ const Graph = () => {
           controls.update();
         })
         .onComplete(() => {
-          // Animation pour se déplacer vers l'objet cible
           const tweenToTarget = new TWEEN.Tween(intermediatePosition)
             .to(target, 1500) // Durée de la deuxième étape de l'animation en ms
             .easing(TWEEN.Easing.Quadratic.InOut)
@@ -178,6 +212,14 @@ const Graph = () => {
               camera.position.set(intermediatePosition.x, intermediatePosition.y, intermediatePosition.z);
               controls.target.set(targetPosition.x, targetPosition.y, targetPosition.z);
               controls.update();
+            })
+            .start();
+    
+          const rotationTween = new TWEEN.Tween(startRotation)
+            .to(endRotation, 1000) // Durée de l'animation en ms
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .onUpdate(() => {
+              camera.rotation.set(startRotation.x, startRotation.y, startRotation.z);
             })
             .start();
         })
