@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import { transformData } from './utils/transformData';
+import TWEEN from '@tweenjs/tween.js';
 import termsData from './data/terms.json';
 import './Graph.css';
 
@@ -156,15 +157,38 @@ const Graph = () => {
       if (intersects.length > 0) {
         const intersected = intersects[0].object;
         setSelectedNode(intersected.userData);
-        controls.target.copy(intersected.parent.position); // Centre la caméra sur le rectangle cliqué
+        animateCameraTo(intersected.parent.position, 10); // Transition vers le rectangle cliqué avec une distance de zoom de 10
       }
+    };
+
+    / Animation pour s'éloigner de l'objet actuel
+      const tweenAway = new TWEEN.Tween(startPosition)
+        .to(intermediatePosition, 1500) // Durée de la première étape de l'animation en ms
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onUpdate(() => {
+          camera.position.set(startPosition.x, startPosition.y, startPosition.z);
+          controls.update();
+        })
+        .onComplete(() => {
+          // Animation pour se déplacer vers l'objet cible
+          const tweenToTarget = new TWEEN.Tween(intermediatePosition)
+            .to(target, 1500) // Durée de la deuxième étape de l'animation en ms
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .onUpdate(() => {
+              camera.position.set(intermediatePosition.x, intermediatePosition.y, intermediatePosition.z);
+              controls.target.set(targetPosition.x, targetPosition.y, targetPosition.z);
+              controls.update();
+            })
+            .start();
+        })
+        .start();
     };
 
     mount.addEventListener('click', onDocumentMouseClick, false);
 
     const animate = () => {
       requestAnimationFrame(animate);
-
+      TWEEN.update();
       groups.forEach(group => {
         group.lookAt(camera.position); // Fait pivoter les groupes pour faire face à la caméra
       });
