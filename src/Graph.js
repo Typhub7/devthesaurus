@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
@@ -9,6 +9,7 @@ import './Graph.css';
 
 const Graph = () => {
   const mountRef = useRef(null);
+  const [selectedNode, setSelectedNode] = useState(null);
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -55,6 +56,9 @@ const Graph = () => {
     labelLightTwo.position.set(0, -5, 0);
     scene.add(labelLightTwo);
 
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
     const elements = transformData(termsData);
 
     const getColorByLevel = (level) => {
@@ -69,6 +73,7 @@ const Graph = () => {
     const loader = new FontLoader();
 
     const groups = [];
+    const rectangles = [];
 
     elements.nodes.forEach(node => {
       const width = 0.15;
@@ -101,11 +106,12 @@ const Graph = () => {
       });
       const rectangle = new THREE.Mesh(geometry, material);
       rectangle.position.set(0, 0, 0); // Position relative au groupe
+      rectangle.userData = node; // Attache les données du nœud à l'objet rectangle
 
       const group = new THREE.Group();
       group.position.set(node.x, node.y, node.z); // Position absolue
       group.add(rectangle);
-        ///fonts/helvetiker_regular.typeface.json
+
       loader.load('/fonts/BionCond_Bold.json', function (font) {
         const textGeometry = new TextGeometry(node.label, {
           font: font,
@@ -122,6 +128,7 @@ const Graph = () => {
 
       scene.add(group);
       groups.push(group);
+      rectangles.push(rectangle); // Ajoute le rectangle à la liste des rectangles
     });
 
     elements.edges.forEach(edge => {
@@ -137,6 +144,24 @@ const Graph = () => {
       scene.add(line);
     });
 
+    const onDocumentMouseClick = (event) => {
+      event.preventDefault();
+      const rect = mount.getBoundingClientRect();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+
+      const intersects = raycaster.intersectObjects(rectangles);
+
+      if (intersects.length > 0) {
+        const intersected = intersects[0].object;
+        setSelectedNode(intersected.userData);
+        controls.target.copy(intersected.parent.position); // Centre la caméra sur le rectangle cliqué
+      }
+    };
+
+    mount.addEventListener('click', onDocumentMouseClick, false);
+
     const animate = () => {
       requestAnimationFrame(animate);
 
@@ -150,11 +175,23 @@ const Graph = () => {
     animate();
 
     return () => {
+      mount.removeEventListener('click', onDocumentMouseClick);
       mount.removeChild(renderer.domElement);
     };
   }, []);
 
-  return <div ref={mountRef} className="w-3/4 h-screen"></div>;
+  return (
+    <div className="flex">
+      <div ref={mountRef} className="w-3/4 h-screen"></div>
+      {selectedNode && (
+        <div className="w-1/4 h-screen bg-gray-100 p-4 overflow-auto">
+          <h2>{selectedNode.label}</h2>
+          <p>{selectedNode.description}</p>
+          {selectedNode.link && <a href={selectedNode.link} target="_blank" rel="noopener noreferrer">More Info</a>}
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Graph;
