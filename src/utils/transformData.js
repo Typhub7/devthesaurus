@@ -45,7 +45,7 @@ export const transformData = (data) => {
         const childLevel = level + 1;
 
         // Définir un rayon plus petit pour les petits-enfants
-        const childRadius = childLevel === 2 ? baseRadius / 5 : baseRadius * 4;
+        const childRadius = childLevel === 2 ? baseRadius * 2 : baseRadius * 7;
 
         // Calcule l'angle pour positionner les enfants de manière équidistante autour du parent
         const angle = (index / node.children.length) * Math.PI * 2;

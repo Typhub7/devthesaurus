@@ -17,7 +17,7 @@ const Graph = () => {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    camera.position.z = 5;
+    camera.position.z = 15;
 
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(width, height);
@@ -44,19 +44,31 @@ const Graph = () => {
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 50000);
     hemiLight.position.set(0, 1, 0);
     scene.add(hemiLight);
+    
+    // Lumière directionnelle supplémentaire 1 fixe pour les étiquettes
+    const labelLight = new THREE.DirectionalLight(0xffffff, 25000);
+    labelLight.position.set(0, 0, -5);
+    scene.add(labelLight);
+
+    // Lumière directionnelle supplémentaire 2 fixe pour les étiquettes
+    const labelLightTwo= new THREE.DirectionalLight(0xffffff,35000);
+    labelLightTwo.position.set(0, -5, 0);
+    scene.add(labelLightTwo);
 
     const elements = transformData(termsData);
 
     const getColorByLevel = (level) => {
       switch (level) {
-        case 0: return 0xFF6347;
-        case 1: return 0x4682B4;
-        case 2: return 0x3CB371;
+        case 0: return 0xc9b037;
+        case 1: return 0xb4b4b4;
+        case 2: return 0xad8a56;
         default: return 0xffffff;
       }
     };
 
     const loader = new FontLoader();
+
+    const groups = [];
 
     elements.nodes.forEach(node => {
       const width = 0.15;
@@ -88,22 +100,28 @@ const Graph = () => {
         side: THREE.FrontSide
       });
       const rectangle = new THREE.Mesh(geometry, material);
-      rectangle.position.set(node.x, node.y, node.z);
-      scene.add(rectangle);
+      rectangle.position.set(0, 0, 0); // Position relative au groupe
 
-      loader.load('/fonts/helvetiker_regular.typeface.json', function (font) {
+      const group = new THREE.Group();
+      group.position.set(node.x, node.y, node.z); // Position absolue
+      group.add(rectangle);
+        ///fonts/helvetiker_regular.typeface.json
+      loader.load('/fonts/BionCond_Bold.json', function (font) {
         const textGeometry = new TextGeometry(node.label, {
           font: font,
-          size: 0.05,
-          depth: 0.002,
+          size: 0.20,
+          depth: 0.05,
           curveSegments: 12,
           bevelEnabled: false
         });
-        const textMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+        const textMaterial = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0, metalness: 0 });
         const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-        textMesh.position.set(node.x - width / 2 + 0.1, node.y - height / 4, node.z + 0.01);
-        scene.add(textMesh);
+        textMesh.position.set(-width / 2 - 0.1, -height / 4 + 0.25, 0.6); // Position relative au groupe
+        group.add(textMesh);
       });
+
+      scene.add(group);
+      groups.push(group);
     });
 
     elements.edges.forEach(edge => {
@@ -121,6 +139,11 @@ const Graph = () => {
 
     const animate = () => {
       requestAnimationFrame(animate);
+
+      groups.forEach(group => {
+        group.lookAt(camera.position); // Fait pivoter les groupes pour faire face à la caméra
+      });
+
       controls.update();
       renderer.render(scene, camera);
     };
